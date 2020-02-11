@@ -1,13 +1,13 @@
 var eventBus = new Vue()
 
 Vue.component('product', {
-	props: {
-		premium: {
-			type: Boolean,
-			required: true
-		}
-	},
-	template: `
+    props: {
+        premium: {
+            type: Boolean,
+            required: true
+        }
+    },
+    template: `
 	<div class="product">
             <div class="product-image">
                    <img v-bind:src="image">
@@ -42,68 +42,69 @@ Vue.component('product', {
 
     </div>
 	`,
-	data() {
-     return {
-		product: 'Socks',
-		brand: 'Vue Mastery',
-		location: 'India',
-		sold: 'USA',
-		description: 'Soft, flexible and super comfortable!',
-		selectedVariant: 0,
-		link: 'https://www.walmart.com/socks',
-		details: ["80% cotton", "20% polyester", "Gender-neutral"],
-		variants : [
-			{
-				variantId: 2234,
-				variantColor:'green',
-				variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
-				variantQuantity: 10
-			},
-			{
-				variantId: 2235,
-				variantColor: 'blue',
-				variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
-				variantQuantity: 0
-			}
-		],
-		reviews: []
-	}
-},
-	methods: {
-		addToCart: function () {
-          this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
-		},
-		updateProduct: function (index) {
-			this.selectedVariant = index
-			console.log(index)
-		}
-	  },
-	  computed: {
-		title() {
-			return this.brand + ' ' + this.product
-		},
-		image() {
-			 return this.variants[this.selectedVariant].variantImage
-		},
-		inStock() {
-			return this.variants[this.selectedVariant].variantQuantity
-		},
-		shipping() {
-			if(this.premium) {
-				return "Free"
-			} 
-			return 2.99
-		}
-	},
-	mounted() {
-		eventBus.$on('review-submitted', productReview => {
-			this.reviews.push(productReview)
-		})
-	}
+    data() {
+        return {
+            product: 'Socks',
+            brand: 'Vue Mastery',
+            location: 'India',
+            sold: 'USA',
+            description: 'Soft, flexible and super comfortable!',
+            selectedVariant: 0,
+            link: 'https://www.walmart.com/socks',
+            details: [
+                "80% cotton", "20% polyester", "Gender-neutral"
+            ],
+            variants: [
+                {
+                    variantId: 2234,
+                    variantColor: 'green',
+                    variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
+                    variantQuantity: 10
+                }, {
+                    variantId: 2235,
+                    variantColor: 'blue',
+                    variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
+                    variantQuantity: 0
+                }
+            ],
+            reviews: []
+        }
+    },
+    methods: {
+        addToCart: function () {
+            this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
+        },
+        updateProduct: function (index) {
+            this.selectedVariant = index
+            console.log(index)
+        }
+    },
+    computed: {
+        title() {
+            return this.brand + ' ' + this.product
+        },
+        image() {
+            return this.variants[this.selectedVariant].variantImage
+        },
+        inStock() {
+            return this.variants[this.selectedVariant].variantQuantity
+        },
+        shipping() {
+            if (this.premium) {
+                return "Free"
+            }
+            return 2.99
+        }
+    },
+    mounted() {
+        eventBus.$on('review-submitted', productReview => {
+            this.reviews.push(productReview)
+        })
+    }
 });
 
 Vue.component('product-review', {
-	template: `
+    template: `
 	<form class="review-form" @submit.prevent="onSubmit">
 
 	<p v-if="errors.length">
@@ -141,44 +142,44 @@ Vue.component('product-review', {
 	
 	</form>
 	`,
-	data() {
-		return {
-			name: null,
-			review: null,
-			rating: null,
-			errors: []
-		}
-	},
-	methods: {
-		onSubmit() {
-			if(this.name && this.review && this.rating){
-			let productReview = {
-				name: this.name,
-				review: this.review,
-				rating: this.rating
-			}
-			eventBus.$emit('review-submitted', productReview)
-			this.name = null
-			this.review = null
-			this.rating = null
-		}
-		else {
-			if(!this.name) this.errors.push("Name required.")
-			if(!this.review) this.errors.push("Review required.")
-			if(!this.rating) this.errors.push("Rating required.")
-		}
-		}
-	}
+    data() {
+        return {name: null, review: null, rating: null, errors: []}
+    },
+    methods: {
+        onSubmit() {
+            if (this.name && this.review && this.rating) {
+                let productReview = {
+                    name: this.name,
+                    review: this.review,
+                    rating: this.rating
+                }
+                eventBus.$emit('review-submitted', productReview)
+                this.name = null
+                this.review = null
+                this.rating = null
+            } else {
+                if (!this.name) 
+                    this.errors.push("Name required.")
+                
+                if (!this.review) 
+                    this.errors.push("Review required.")
+                
+                if (!this.rating) 
+                    this.errors.push("Rating required.")
+                
+            }
+        }
+    }
 })
 
 Vue.component('product-tabs', {
-	props: {
-		reviews: {
-			type: Array,
-			required: false
-		}
-	},
-	template: ` 
+    props: {
+        reviews: {
+            type: Array,
+            required: false
+        }
+    },
+    template: ` 
 	<div> 
 	<span class="tab"
 	      :class="{ activeTab: selectedTab === tab}"
@@ -208,25 +209,27 @@ Vue.component('product-tabs', {
 
 
 	`,
-	data() {
-		return {
-			tabs: ['Reviews', 'Make a Review'],
-			selectedTab: 'Reviews'
-		}
-	}
+    data() {
+        return {
+            tabs: [
+                'Reviews', 'Make a Review'
+            ],
+            selectedTab: 'Reviews'
+        }
+    }
 })
 
 Vue.component('info-tabs', {
-	props: {
-		shipping: {
-			required: true
-		},
-		details: {
-			type: Array,
-			required: true
-		}
-	},
-	template: `
+    props: {
+        shipping: {
+            required: true
+        },
+        details: {
+            type: Array,
+            required: true
+        }
+    },
+    template: `
 	<div>
         <ul>
           <span class="tabs" 
@@ -249,24 +252,26 @@ Vue.component('info-tabs', {
     
       </div>
 	`,
-	data() {
-		return {
-			tabs: ['Shipping', 'Details'],
-			selectedTab: 'Shipping'
-		}
-	}
+    data() {
+        return {
+            tabs: [
+                'Shipping', 'Details'
+            ],
+            selectedTab: 'Shipping'
+        }
+    }
 })
 
-Vue.component('sources-tabs',{
-	props: {
-		location: {
-			required: true
-		},
-		sold: {
-			required: true
-		}
-	},
-	template: `
+Vue.component('sources-tabs', {
+    props: {
+        location: {
+            required: true
+        },
+        sold: {
+            required: true
+        }
+    },
+    template: `
 	<div>
         <ul>
           <span class="tabs" 
@@ -288,24 +293,26 @@ Vue.component('sources-tabs',{
       </div>
 	
 	`,
-	data() {
-		return {
-			tabs: ['Location', 'Sold'],
-			selectedTab: 'Location'
-		}
-	}
+    data() {
+        return {
+            tabs: [
+                'Location', 'Sold'
+            ],
+            selectedTab: 'Location'
+        }
+    }
 })
 
 
 const app = new Vue({
-	el: '#app',
-	data: {
-		premium: false,
-		cart: []
-	},
-	methods: {
-		updateCart(id) {
-	      this.cart.push(id)
-		}
-	}
+    el: '#app',
+    data: {
+        premium: false,
+        cart: []
+    },
+    methods: {
+        updateCart(id) {
+            this.cart.push(id)
+        }
+    }
 });
